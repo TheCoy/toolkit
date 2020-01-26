@@ -1,3 +1,3 @@
-module github.com/TheCoy/golib
+module golib
 
 go 1.13
