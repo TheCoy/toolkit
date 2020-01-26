@@ -6,10 +6,13 @@ package main
 import "fmt"
 import "math/rand"
 import "time"
+import "rsc.io/quote"
 
 func main() {
 	fmt.Println("===golib main===")
+	fmt.Println(quote.Hello())
 }
+
 // SayHello It is a say hi demo
 func SayHello(lan string) {
 	fmt.Println("hello,", lan)
