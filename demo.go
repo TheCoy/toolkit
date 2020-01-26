@@ -1,12 +1,15 @@
 // Package golib is a personal go library
 //
 // It provides a list of common code snippets
-package golib
+package main
 
 import "fmt"
 import "math/rand"
 import "time"
 
+func main() {
+	fmt.Println("===golib main===")
+}
 // SayHello It is a say hi demo
 func SayHello(lan string) {
 	fmt.Println("hello,", lan)
