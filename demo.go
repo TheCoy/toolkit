@@ -56,3 +56,12 @@ func Reverse(s string) string {
 	}
 	return string(runes)
 }
+
+func GenerateNextChar() byte {
+	var c byte
+	rand.Seed(int64(time.Now().Nanosecond()))
+	index := rand.Intn(97)
+	c = byte(index)
+
+	return c
+}
