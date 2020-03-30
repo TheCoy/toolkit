@@ -3,9 +3,11 @@
 // It provides a list of common code snippets
 package golib
 
-import "fmt"
-import "math/rand"
-import "time"
+import (
+	"fmt"
+	"math/rand"
+	"time"
+)
 
 // SayHello It is a say hi demo
 func SayHello(lan string) {
@@ -18,7 +20,7 @@ func GetRandNum(count int) []int {
 	for i := 0; i < count; i++ {
 		times := int64(time.Now().Nanosecond())
 		rand.Seed(times)
-		num := rand.Intn(1000)
+		num := rand.Intn(100)
 		numbers = append(numbers, num)
 	}
 
