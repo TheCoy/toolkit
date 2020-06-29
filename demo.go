@@ -69,5 +69,5 @@ func GenerateNextChar() byte {
 }
 
 func Subtract(a, b int) int {
-    return a - b
+	return a - b
 }
