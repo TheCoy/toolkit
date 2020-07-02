@@ -1,7 +1,7 @@
-// Package golib is a personal go library
+// Package toolkit is a personal go library
 //
 // It provides a list of common code snippets
-package golib
+package toolkit
 
 import (
 	"fmt"
