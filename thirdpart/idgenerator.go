@@ -1,6 +1,8 @@
 package thirdpart
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"math/rand"
 	"sync"
 
@@ -33,4 +35,12 @@ func GenerateRandomString(length int) string {
 		b[i] = letterBytes[rand.Intn(len(letterBytes))]
 	}
 	return string(b)
+}
+
+func GenerateCodePair(length int) (string, string) {
+	code := GenerateRandomString(length)
+	tmp := sha256.Sum256([]byte(code))
+	codeChallenge := hex.EncodeToString(tmp[:])
+
+	return code, codeChallenge
 }
