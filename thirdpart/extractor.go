@@ -1,4 +1,4 @@
-package toy
+package thirdpart
 
 import (
 	"fmt"
