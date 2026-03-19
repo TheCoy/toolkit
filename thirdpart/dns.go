@@ -43,7 +43,7 @@ func (d *DNSCache) PreResolve(host string) []string {
 	d.mu.Lock()
 	d.cache[host] = addrs
 	d.mu.Unlock()
-	slog.Info("[DNSCache]", "host", host, "addrs", addrs, "count", len(addrs))
+	slog.Debug("[DNSCache]", "host", host, "addrs", addrs, "count", len(addrs))
 	return addrs
 }
 
