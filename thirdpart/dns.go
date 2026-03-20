@@ -40,11 +40,21 @@ func (d *DNSCache) PreResolve(host string) []string {
 		slog.Warn("[DNSCache] resolve failed", "host", host, "error", err)
 		return nil
 	}
+	var v4addrs []string
+	for _, addr := range addrs {
+		if net.ParseIP(addr).To4() != nil {
+			v4addrs = append(v4addrs, addr)
+		}
+	}
+	if len(v4addrs) == 0 {
+		slog.Warn("[DNSCache] no IPv4 address found", "host", host, "addrs", addrs)
+		return nil
+	}
 	d.mu.Lock()
-	d.cache[host] = addrs
+	d.cache[host] = v4addrs
 	d.mu.Unlock()
-	slog.Debug("[DNSCache]", "host", host, "addrs", addrs, "count", len(addrs))
-	return addrs
+	slog.Debug("[DNSCache]", "host", host, "addrs", v4addrs, "count", len(v4addrs))
+	return v4addrs
 }
 
 // Resolve 获取缓存IP列表，缓存未命中则触发预解析
