@@ -2,7 +2,8 @@ package generation
 
 import (
 	"fmt"
-	"math/rand/v2"
+	"hash/fnv"
+	"math/rand"
 )
 
 // BrowserProfile 模拟真实浏览器的完整指纹
@@ -19,7 +20,7 @@ type BrowserProfile struct {
 
 // chromeVersions 近期 Chrome 版本池，用于生成多样化的浏览器指纹
 // 避免所有实例使用完全相同的版本号
-var chromeVersions = []int{142, 143, 144, 145}
+var chromeVersions = []int{143, 144, 145, 146}
 
 // platforms 平台配置：UA中的OS字符串 + Client Hints中的平台名
 // Chrome UA Reduction 后，macOS 固定为 10_15_7，Windows 固定为 NT 10.0
@@ -52,9 +53,35 @@ var notABrandVariants = []string{
 // 每个实例应在初始化时调用一次，之后复用同一个 Profile
 // 保证同一实例的所有请求指纹一致（真实浏览器就是这样）
 func RandomBrowserProfile() BrowserProfile {
-	ver := chromeVersions[rand.IntN(len(chromeVersions))]
-	plat := platforms[rand.IntN(len(platforms))]
-	lang := languages[rand.IntN(len(languages))]
+	ver := chromeVersions[rand.Intn(len(chromeVersions))]
+	plat := platforms[rand.Intn(len(platforms))]
+	lang := languages[rand.Intn(len(languages))]
+	notABrand := notABrandVariants[ver%len(notABrandVariants)]
+
+	return BrowserProfile{
+		UserAgent: fmt.Sprintf(
+			"Mozilla/5.0 (%s) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/%d.0.0.0 Safari/537.36",
+			plat.uaOS, ver,
+		),
+		SecChUa: fmt.Sprintf(
+			`"Chromium";v="%d", "Google Chrome";v="%d", %s`,
+			ver, ver, notABrand,
+		),
+		SecChUaMobile:   "?0",
+		SecChUaPlatform: plat.chPlatform,
+		AcceptLanguage:  lang,
+	}
+}
+
+func RandomBrowserProfileWithSalt(salt string) BrowserProfile {
+	h := fnv.New64a()
+	h.Write([]byte(salt))
+	seed := int64(h.Sum64())
+
+	var rng = rand.New(rand.NewSource(seed))
+	ver := chromeVersions[rng.Intn(len(chromeVersions))]
+	plat := platforms[rng.Intn(len(platforms))]
+	lang := languages[rng.Intn(len(languages))]
 	notABrand := notABrandVariants[ver%len(notABrandVariants)]
 
 	return BrowserProfile{
