@@ -23,6 +23,10 @@ func GenDeviceId() string {
 	return deviceId
 }
 
+func GenDeviceIdWithSeed(seed string) string {
+	return uuid.NewSHA1(uuid.NameSpaceURL, []byte(seed)).String()
+}
+
 func GenTraceId() string {
 	traceId, _ := uuid.NewUUID()
 	return traceId.String()
